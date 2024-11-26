@@ -4,6 +4,7 @@ import bcryptjs from 'bcryptjs'
 import verifyEmailTemplate from '../utils/verifyEmailTemplate.js';
 import generatedAccessToken from '../utils/generatedAccessToken.js';
 import generatedRefreshToken from '../utils/generatedRefreshToken.js';
+import uploadImageCloudinary  from '../utils/uploadImageCloudinary.js'
 
 
 export async function registerUserController(request,response) {
@@ -204,6 +205,34 @@ export async function logoutController(request,response) {
             message : error.message || error,
             error : true,
             success : false
+        })
+    }
+}
+
+export async function uploadAvatar(request,response){
+    try {
+        const userId = request.userId // auth middlware
+        const image = request.file //multer middlware
+
+        const upload = await uploadImageCloudinary(image)
+
+        const updateUser = await UserModel.findByIdAndUpdate(userId,{
+            avatar : upload.url
+        })
+
+        return response.json({
+            message : "update profile",
+            data : {
+                _id : userId,
+                avatar : upload.url
+            }
+        })
+
+    } catch (error) {
+        return response.status(500).json({
+            message : error.message || error,
+            error : true,
+            sucess : false
         })
     }
 }
