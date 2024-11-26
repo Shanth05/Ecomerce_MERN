@@ -96,3 +96,25 @@ export async function verifyEmailController(request) {
     }   
 }
 
+export async function loginController (request,response){
+    try {
+        const{email,password} = request.body
+
+        const user = await UserModel.findOne({email})
+
+        if(!user){
+            return response.status(500).json({
+                message : "User not register",
+                error: true,
+                success: false
+            })
+        }
+
+    } catch (error) {
+        return response.status(500).json({
+            message : error.message || error,
+            error: true,
+            success: false
+        })
+    }
+}
