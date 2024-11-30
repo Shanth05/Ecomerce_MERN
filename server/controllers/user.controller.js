@@ -5,6 +5,8 @@ import verifyEmailTemplate from '../utils/verifyEmailTemplate.js';
 import generatedAccessToken from '../utils/generatedAccessToken.js';
 import generatedRefreshToken from '../utils/generatedRefreshToken.js';
 import uploadImageCloudinary  from '../utils/uploadImageCloudinary.js'
+import generatedOtp from '../utils/generatedOtp.js';
+import forgotPasswordTemplate from '../utils/forgotPasswordTemplate.js'
 
 
 export async function registerUserController(request,response) {
@@ -269,5 +271,58 @@ export async function updateUserDetails(request,response) {
             error : true,
             success : false
         })
+    }
+}
+
+export async function forgotPasswordController(request, response) {
+    try {
+        const { email } = request.body;
+
+        // Check if user exists with the provided email
+        const user = await UserModel.findOne({ email });
+
+        // If user does not exist, return an error response
+        if (!user) {
+            return response.status(400).json({
+                message: "Email not available",
+                error: true,
+                success: false
+            });
+        }
+
+        // Generate OTP
+        const otp = generatedOtp();
+        const expireTime = new Date() + 60 * 60 * 1000; // OTP expiry time (1 hour)
+
+        // Update user document with OTP and expiry time
+        const update = await UserModel.findByIdAndUpdate(user._id, {
+            forgot_password_otp: otp,
+            forgot_password_expiry: new Date(expireTime).toString()
+        });
+
+        // Send OTP email to the user
+        await sendEmail({
+            sendTo: email,
+            subject: "Forgot password from Ecom",
+            html: forgotPasswordTemplate({
+                name: user.name,
+                otp: otp
+            })
+        });
+
+        // Return success response
+        return response.json({
+            message: "Check your email for OTP",
+            error: false,
+            success: true
+        });
+
+    } catch (error) {
+        // Handle any errors that occur during the process
+        return response.status(500).json({
+            message: error.message || error,
+            error: true,
+            success: false
+        });
     }
 }
