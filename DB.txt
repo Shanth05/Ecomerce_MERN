@@ -1,0 +1,109 @@
+Enum accountStatus {
+  Active
+  Inactive
+  Suspended
+}
+
+
+Enum Role {
+  ADMIN
+  USER
+}
+
+Table users {
+  _id string pk
+  name string
+  email string
+  password string
+  avatar string
+  mobile number
+  refresh_token string
+  verify_email boolean
+  last_login_date date
+  status accountStatus
+  address_details array [ref: > address._id]
+  shopping_cart array [ref: > cartProduct._id]
+  orderHistory array [ref: > order._id ]
+  forgot_password_otp string
+  forgot_password_expiry Date
+  role Role
+  createdAt Date 
+  updatedAt Date
+}
+
+Table address {
+  _id string pk
+  address_line string
+  city string
+  state string
+  pincode string
+  country string
+  mobile number
+  createdAt Date 
+  updatedAt Date
+}
+
+
+Table product {
+  _id string pk
+  name string
+  image array
+  categoryId array [ref : > category._id]
+  sub_categoryId array [ref : > sub_category._id]
+  unit string
+  stock number
+  price number
+  discount number
+  description string
+  more_details object
+  publish boolean
+  createdAt Date 
+  updatedAt Date
+}
+
+Table category {
+  _id string  pk
+  name string
+  image string
+  createdAt Date 
+  updatedAt Date
+}
+
+Table sub_category {
+  _id string  pk
+  name string
+  image string
+  categoryId Array [ref : > category._id ]
+  createdAt Date 
+  updatedAt Date
+}
+
+Table cartProduct {
+  _id string pk
+  productId string [ref : > product._id]
+  quntity number
+  userId string [ref : > users._id]
+  createdAt date
+  updatedAt date
+}
+
+
+Table order {
+  _id string
+  userId string [ref : > users._id]
+  orderId string
+  product_details string 
+  payment_id string
+  payment_status string
+  delivery_address object
+  delivery_status string
+  subTotalAmt number
+  totalAmt number
+  invoice_receipt string
+  createdAt date
+  updatedAt date
+}
+
+Ref: "users"."mobile" < "users"."last_login_date"
+
+Ref: "users"."email" < "users"."password"
