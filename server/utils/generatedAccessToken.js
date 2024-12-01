@@ -8,4 +8,4 @@ const generatedAccessToken = async (userId) => {
     return token
 }
 
-export default generatedAccessToken
+export default generatedAccessToken;
