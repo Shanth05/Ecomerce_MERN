@@ -1,10 +1,11 @@
+import { Outlet } from 'react-router-dom'
 import './App.css'
 
 function App() {
 
   return (
-    <main className='text-red-500 text-3xl font-bold'>
-      Vite App
+    <main>
+      <Outlet/>
     </main>
   )
 }
