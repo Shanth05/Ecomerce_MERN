@@ -3,32 +3,36 @@ import mongoose from "mongoose";
 const addressSchema = new mongoose.Schema({
     address_line : {
         type : String,
-        default : " "
+        default : ""
     },
     city : {
         type : String,
-        default : " "
+        default : ""
     },
     state : {
         type : String,
-        default : " "
+        default : ""
     },
     pincode : {
-        type : String,
+        type : String
     },
     country : {
-        type : String,
+        type : String
     },
     mobile : {
         type : Number,
-        default : "null"
+        default : null
     },
     status : {
         type : Boolean,
         default : true
+    },
+    userId : {
+        type : mongoose.Schema.ObjectId,
+        default : ""
     }
 },{
-        timestamps : true
+    timestamps : true
 })
 
 const AddressModel = mongoose.model('address',addressSchema)
