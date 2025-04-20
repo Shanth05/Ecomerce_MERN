@@ -1,36 +1,36 @@
-import mongoose from "mongoose"
+import mongoose from "mongoose";
 
-const productchema = new mongoose.Schema({
+const productSchema = new mongoose.Schema({
     name : {
         type : String,
     },
     image : {
         type : Array,
-        default : [ ]
+        default : []
     },
     category : [
         {
             type : mongoose.Schema.ObjectId,
-            ref : "category"
+            ref : 'category'
         }
     ],
     subCategory : [
         {
             type : mongoose.Schema.ObjectId,
-            ref : "subCategory"
+            ref : 'subCategory'
         }
     ],
     unit : {
         type : String,
-        default : " "
+        default : ""
     },
     stock : {
         type : Number,
-        default : 0
+        default : null
     },
     price : {
         type : Number,
-        default : null
+        defualt : null
     },
     discount : {
         type : Number,
@@ -38,7 +38,7 @@ const productchema = new mongoose.Schema({
     },
     description : {
         type : String,
-        default : " "
+        default : ""
     },
     more_details : {
         type : Object,
@@ -49,9 +49,19 @@ const productchema = new mongoose.Schema({
         default : true
     }
 },{
-    timeseries : true
+    timestamps : true
 })
 
-const ProductModel = mongoose.model('product',productchema)
+//create a text index
+productSchema.index({
+    name  : "text",
+    description : 'text'
+},{
+    name : 10,
+    description : 5
+})
+
+
+const ProductModel = mongoose.model('product',productSchema)
 
 export default ProductModel
