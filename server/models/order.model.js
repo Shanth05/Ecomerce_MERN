@@ -1,11 +1,11 @@
-import mongoose from 'mongoose'
+import mongoose from "mongoose";
 
 const orderSchema = new mongoose.Schema({
     userId : {
         type : mongoose.Schema.ObjectId,
-        ref : "User"
+        ref : 'User'
     },
-    orderId: {
+    orderId : {
         type : String,
         required : [true, "Provide orderId"],
         unique : true
@@ -15,8 +15,8 @@ const orderSchema = new mongoose.Schema({
         ref : "product"
     },
     product_details : {
-        name :String,
-        image : Array
+        name : String,
+        image : Array,
     },
     paymentId : {
         type : String,
@@ -28,9 +28,13 @@ const orderSchema = new mongoose.Schema({
     },
     delivery_address : {
         type : mongoose.Schema.ObjectId,
-        ref :"address"
+        ref : 'address'
     },
     subTotalAmt : {
+        type : Number,
+        default : 0
+    },
+    totalAmt : {
         type : Number,
         default : 0
     },
